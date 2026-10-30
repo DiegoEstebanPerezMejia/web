@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | POS Control</title>
+
+    <!-- Tipografía Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap 5.3 -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        /* 1. VARIABLES DE DISEÑO */
+
+        :root {
+            --azul-oscuro: #16324F;
+            --azul-principal: #2563EB;
+            --azul-hover: #1D4ED8;
+            --azul-claro: #EFF6FF;
+
+            --blanco: #FFFFFF;
+            --gris-fondo: #F3F4F6;
+            --gris-borde: #E5E7EB;
+            --gris-texto: #6B7280;
+            --gris-oscuro: #374151;
+
+            --radio: 12px;
+            --sombra: 0 12px 35px rgba(22, 50, 79, 0.08);
+        }
+
+        /* 2. CONFIGURACIÓN GENERAL */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Inter", Arial, sans-serif;
+            background: var(--gris-fondo);
+            color: var(--gris-oscuro);
+        }
+
+        /* 3. DISTRIBUCIÓN PRINCIPAL */
+
+        .login-container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* 4. PANEL IZQUIERDO */
+
+        .login-brand {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 45px;
+            background: var(--azul-oscuro);
+            color: var(--blanco);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
+            background: var(--azul-principal);
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #CBD5E1;
+            font-size: 12px;
+        }
+
+        .brand-content {
+            max-width: 480px;
+            margin: 50px auto;
+        }
+
+        .brand-label {
+            display: inline-block;
+            padding: 8px 13px;
+            border: 1px solid #47617B;
+            border-radius: 30px;
+            color: #BFDBFE;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .brand-content h2 {
+            font-size: clamp(30px, 3vw, 43px);
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 20px;
+        }
+
+        .brand-content h2 span {
+            color: #60A5FA;
+        }
+
+        .brand-content > p {
+            color: #CBD5E1;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 35px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            color: #E2E8F0;
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            background: #294766;
+            color: #93C5FD;
+            font-weight: 700;
+        }
+
+        .brand-footer {
+            color: #94A3B8;
+            font-size: 12px;
+        }
+
+        /* 5. PANEL DERECHO */
+
+        .login-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 38px;
+            border: 1px solid var(--gris-borde);
+            border-radius: var(--radio);
+            background: var(--blanco);
+            box-shadow: var(--sombra);
+        }
+
+        .mobile-brand {
+            display: none;
+        }
+
+        .login-heading {
+            margin-bottom: 30px;
+        }
+
+        .login-heading h2 {
+            color: var(--azul-oscuro);
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .login-heading p {
+            color: var(--gris-texto);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        /* 6. FORMULARIO */
+
+        .form-label {
+            color: var(--gris-oscuro);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .form-control {
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid var(--gris-borde);
+            border-radius: 9px;
+            background: #F9FAFB;
+            color: var(--gris-oscuro);
+            font-size: 13px;
+        }
+
+        .form-control::placeholder {
+            color: #9CA3AF;
+        }
+
+        .form-control:focus {
+            background: var(--blanco);
+            border-color: var(--azul-principal);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .input-group .form-control {
+            border-radius: 9px 0 0 9px;
+        }
+
+        .password-toggle {
+            min-width: 65px;
+            border: 1px solid var(--gris-borde);
+            border-left: 0;
+            border-radius: 0 9px 9px 0;
+            background: #F9FAFB;
+            color: var(--gris-texto);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .password-toggle:hover {
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+        }
+
+        /* 7. OPCIONES */
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 25px;
+        }
+
+        .form-check-label {
+            color: var(--gris-texto);
+            font-size: 12px;
+        }
+
+        .form-check-input {
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--azul-principal);
+            border-color: var(--azul-principal);
+        }
+
+        .login-link {
+            color: var(--azul-principal);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .login-link:hover {
+            color: var(--azul-hover);
+            text-decoration: underline;
+        }
+
+        /* 8. BOTÓN DE INICIO */
+
+        .btn-login {
+            width: 100%;
+            min-height: 49px;
+            border: none;
+            border-radius: 9px;
+            background: var(--azul-principal);
+            color: var(--blanco);
+            font-size: 14px;
+            font-weight: 700;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-login:hover {
+            background: var(--azul-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-login:focus-visible,
+        .password-toggle:focus-visible {
+            outline: 3px solid #93C5FD;
+            outline-offset: 3px;
+        }
+
+        /* 9. MENSAJES */
+
+        .login-message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .login-message.show {
+            display: block;
+        }
+
+        .login-message.info {
+            background: var(--azul-claro);
+            color: var(--azul-oscuro);
+        }
+
+        .login-message.error {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        /* 10. PIE DEL FORMULARIO */
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 27px 0;
+            color: #9CA3AF;
+            font-size: 11px;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--gris-borde);
+        }
+
+        .security-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: var(--gris-texto);
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .login-footer {
+            margin-top: 28px;
+            color: var(--gris-texto);
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        /* 11. DISEÑO RESPONSIVO */
+
+        @media (max-width: 900px) {
+
+            .login-container {
+                grid-template-columns: 0.8fr 1.2fr;
+            }
+
+            .login-brand {
+                padding: 30px;
+            }
+
+            .login-main {
+                padding: 25px;
+            }
+
+            .login-card {
+                padding: 28px;
+            }
+
+            .brand-content h2 {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-brand {
+                display: none;
+            }
+
+            .login-main {
+                min-height: 100vh;
+                padding: 24px 16px;
+                flex-direction: column;
+            }
+
+            .login-card {
+                max-width: 430px;
+                padding: 28px 22px;
+            }
+
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 28px;
+            }
+
+            .mobile-brand .brand-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 23px;
+            }
+
+            .mobile-brand h1 {
+                margin: 0;
+                color: var(--azul-oscuro);
+                font-size: 19px;
+                font-weight: 800;
+            }
+
+            .mobile-brand p {
+                margin: 4px 0 0;
+                color: var(--gris-texto);
+                font-size: 11px;
+            }
+
+            .login-heading h2 {
+                font-size: 24px;
+            }
+
+            .form-options {
+                align-items: flex-start;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <!-- PANEL IZQUIERDO -->
+
+        <aside class="login-brand">
+
+            <div class="brand">
+
+                <div class="brand-icon" aria-hidden="true">
+                    ▦
+                </div>
+
+                <div>
+                    <h1>POS Control</h1>
+                    <p>Sistema de ventas</p>
+                </div>
+
+            </div>
+
+            <section class="brand-content">
+
+                <span class="brand-label">
+                    SISTEMA DE PUNTO DE VENTA
+                </span>
+
+                <h2>
+                    Administra tu negocio
+                    <span>de forma sencilla.</span>
+                </h2>
+
+                <p>
+                    Accede a tu plataforma de administración y
+                    gestiona tus ventas, productos e inventario
+                    desde un solo lugar.
+                </p>
+
+                <ul class="feature-list">
+
+                    <li>
+                        <span class="feature-icon" aria-hidden="true">
+                            ✓
+                        </span>
+                        Control de ventas y operaciones
+                    </li>
+
+                    <li>
+                        <span class="feature-icon" aria-hidden="true">
+                            ✓
+                        </span>
+                        Administración de productos
+                    </li>
+
+                    <li>
+                        <span class="feature-icon" aria-hidden="true">
+                            ✓
+                        </span>
+                        Información organizada y accesible
+                    </li>
+
+                </ul>
+
+            </section>
+
+            <footer class="brand-footer">
+                POS Control v1.0 · Panel de administración
+            </footer>
+
+        </aside>
+
+
+        <!-- PANEL DE INICIO DE SESIÓN -->
+
+        <main class="login-main">
+
+            <!-- Marca para dispositivos móviles -->
+
+            <div class="mobile-brand">
+
+                <div class="brand-icon" aria-hidden="true">
+                    ▦
+                </div>
+
+                <div>
+                    <h1>POS Control</h1>
+                    <p>Sistema de ventas</p>
+                </div>
+
+            </div>
+
+
+            <!-- TARJETA DE LOGIN -->
+
+            <section class="login-card" aria-labelledby="login-title">
+
+                <header class="login-heading">
+
+                    <h2 id="login-title">
+                        Bienvenido
+                    </h2>
+
+                    <p>
+                        Ingresa tus credenciales para acceder
+                        al panel de administración.
+                    </p>
+
+                </header>
+
+
+                <!-- FORMULARIO -->
+
+                <form id="login-form">
+
+                    <!-- Usuario -->
+
+                    <div class="mb-4">
+
+                        <label for="usuario" class="form-label">
+                            Usuario o correo electrónico
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="usuario"
+                            name="usuario"
+                            placeholder="Ingresa tu usuario"
+                            autocomplete="username"
+                            required
+                            minlength="1"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+
+                    <!-- Contraseña -->
+
+                    <div class="mb-3">
+
+                        <label for="password" class="form-label">
+                            Contraseña
+                        </label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Ingresa tu contraseña"
+                                autocomplete="current-password"
+                                required
+                                minlength="1"
+                                maxlength="128"
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="toggle-password"
+                                aria-controls="password"
+                                aria-pressed="false"
+                            >
+                                Mostrar
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Opciones -->
+
+                    <div class="form-options">
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="remember"
+                                name="remember"
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="remember"
+                            >
+                                Recordar usuario
+                            </label>
+
+                        </div>
+
+                        <a
+                            href="#recuperar"
+                            class="login-link"
+                            id="forgot-password"
+                        >
+                            ¿Olvidaste tu contraseña?
+                        </a>
+
+                    </div>
+
+
+                    <!-- Botón -->
+
+                    <button
+                        type="submit"
+                        class="btn-login"
+                    >
+                        Iniciar sesión
+                    </button>
+
+
+                    <!-- Mensajes -->
+
+                    <div
+                        class="login-message"
+                        id="login-message"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
+
+                </form>
+
+
+                <div class="login-divider">
+                    ACCESO AL SISTEMA
+                </div>
+
+
+                <div class="security-note">
+
+                    <span aria-hidden="true">🔒</span>
+
+                    <span>
+                        Acceso exclusivo para usuarios autorizados.
+                    </span>
+
+                </div>
+
+
+                <footer class="login-footer">
+
+                    <p>
+                        © 2026 POS Control.
+                        Todos los derechos reservados.
+                    </p>
+
+                    <p>
+                        Sistema de administración de ventas.
+                    </p>
+
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        /* 1. MOSTRAR U OCULTAR CONTRASEÑA */
+
+        const passwordInput = document.getElementById("password");
+
+        const togglePassword =
+            document.getElementById("toggle-password");
+
+        togglePassword.addEventListener("click", () => {
+
+            const isPassword =
+                passwordInput.type === "password";
+
+            passwordInput.type = isPassword
+                ? "text"
+                : "password";
+
+            togglePassword.textContent = isPassword
+                ? "Ocultar"
+                : "Mostrar";
+
+            togglePassword.setAttribute(
+                "aria-pressed",
+                String(isPassword)
+            );
+
+        });
+
+
+        /* 2. MENSAJES DEL FORMULARIO */
+
+        const loginForm = document.getElementById("login-form");
+
+        const message = document.getElementById("login-message");
+
+        function showMessage(text, type = "info") {
+
+            message.textContent = text;
+
+            message.className =
+                `login-message show ${type}`;
+
+        }
+
+
+        /* 3. INICIO DE SESIÓN CON EL SERVIDOR */
+        const usuarioInput = document.getElementById('usuario');
+        const rememberInput = document.getElementById('remember');
+        try {
+            const recordado = localStorage.getItem('pos_usuario_recordado');
+            if (recordado) { usuarioInput.value = recordado; rememberInput.checked = true; }
+        } catch (_) {}
+
+        loginForm.addEventListener('submit', async event => {
+            event.preventDefault();
+            if (!loginForm.reportValidity()) return;
+            const boton = loginForm.querySelector('[type="submit"]');
+            if (boton.disabled) return;
+            boton.disabled = true;
+            try {
+                const respuesta = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: usuarioInput.value, contrasena: passwordInput.value })
+                });
+                const datos = await respuesta.json();
+                if (!respuesta.ok) throw new Error(datos.error || 'No se pudo iniciar sesión.');
+                try {
+                    if (rememberInput.checked) localStorage.setItem('pos_usuario_recordado', usuarioInput.value);
+                    else localStorage.removeItem('pos_usuario_recordado');
+                } catch (_) {}
+                location.href = '/ventas.html';
+            } catch (error) {
+                showMessage(error.message || 'No se pudo conectar con el servidor.', 'error');
+            } finally {
+                boton.disabled = false;
+            }
+        });
+
+        /* 4. RECUPERACIÓN DE CONTRASEÑA */
+
+        document.getElementById("forgot-password")
+            .addEventListener("click", (event) => {
+
+                event.preventDefault();
+
+                showMessage(
+                    "La recuperación de contraseña debe " +
+                    "implementarse mediante un servicio " +
+                    "de autenticación.",
+                    "info"
+                );
+
+            });
+
+    </script>
+
+</body>
+
+</html>

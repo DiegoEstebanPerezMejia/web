@@ -1,0 +1,69 @@
+POS CONTROL — TRES PANTALLAS CONECTADAS
+
+1. proveedores.html: cuestionario original con todas sus secciones, envío al servidor y lista de proveedores registrados.
+2. ventas.html: carrito por talla y color, cliente, método de pago, registro de venta, historial y ticket imprimible.
+3. catalogo.html: búsqueda, existencias por variante y filtro de stock bajo.
+
+INICIAR EN MAC
+Necesitas Node.js 18 o superior.
+Abre Terminal en esta carpeta y ejecuta:
+  npm ci
+  npm start
+Abre http://localhost:3000
+Detener: Control + C.
+No abras los HTML con doble clic: usa la dirección del servidor.
+
+MODO DE PRUEBA (PREDETERMINADO)
+No necesitas instalar PostgreSQL ni introducir contraseñas.
+El servidor utiliza PGlite, una versión integrada de PostgreSQL para desarrollo, y ejecuta los tres SQL automáticamente. Guarda los datos en la carpeta datos; se mantienen cuando reinicias. No se utiliza localStorage ni una lista simulada en el navegador.
+Al iniciar se crean 4 prendas casuales de hombre, 16 variantes (M/L y Negro/Azul marino), 192 unidades, un cliente, un proveedor, un empleado de prueba y los métodos de pago. Todos los nombres y datos son ficticios. La carga inicial es repetible y no repone el stock vendido.
+
+USAR TU POSTGRESQL DE PGADMIN
+1. Crea una base NUEVA llamada pos_ropa o usa una que tenga exactamente el esquema original adjunto. No uses una versión antigua incompatible de las tablas.
+2. Ejecuta: cp .env.example .env
+3. Ejecuta: open -e .env
+4. Cambia DB_MODE=postgres y configura los datos PG..., incluida tu contraseña.
+5. Ejecuta npm start. Los tres SQL se ejecutan automáticamente.
+La aplicación utiliza la misma API y las mismas pantallas en ambos modos.
+
+QUÉ SE GUARDA
+Cuestionario: proveedor y cuestionario_proveedor.respuestas (JSONB), con toda la información y los productos ofrecidos. Las propuestas del proveedor no se convierten automáticamente en inventario porque no indican unidades exactas por talla/color ni precio de venta al público.
+Venta: venta, detalle_venta, pago, factura y descuento de inventario, todo en una transacción. El servidor toma los precios de la base; no confía en el total del navegador. Si falta stock se revierte toda la operación.
+Factura contiene únicamente un folio interno. No se genera CFDI ni se cobra realmente una tarjeta.
+El catálogo consulta las tablas originales mediante vista_catalogo_prendas.
+
+CONSULTAS EN PGADMIN (MODO POSTGRES)
+SELECT * FROM vista_catalogo_prendas;
+SELECT * FROM vista_venta_total;
+SELECT * FROM pago;
+SELECT * FROM cuestionario_proveedor;
+
+ARCHIVOS DE BASE
+01_esquema.sql es el archivo original adjunto, sin cambios.
+02_cuestionario.sql agrega la tabla de respuestas del cuestionario.
+03_datos_demo.sql agrega los datos ficticios sin borrar registros existentes.
+
+PRUEBAS
+npm test crea una base temporal aislada y verifica el registro de ventas, ticket, descuento y reversión de inventario y cuestionarios. No modifica tus datos.
+
+ALCANCE
+Proyecto local académico, un empleado de demostración, sin autenticación ni permisos por rol. El servidor escucha solo en tu equipo. No está preparado para exposición pública. Cada envío del cuestionario crea un nuevo proveedor.
+
+VERSIÓN CORREGIDA CON BOOTSTRAP
+Interfaz en HTML, CSS y JavaScript, sin Vue. Bootstrap 5.3.3 se utiliza en las tres pantallas y Bootstrap Icons 1.11.3 en proveedores. Las dependencias se sirven desde node_modules para no depender del CDN.
+Ventas e inventario usan tablas, controles y botones de Bootstrap combinados con el CSS original.
+
+MAC — INICIO RÁPIDO
+Descomprime el ZIP y abre Terminal en pos_ropa_bootstrap:
+  npm ci
+  npm start
+Abre http://localhost:3000
+El modo demo usa PostgreSQL integrado. Para tu PostgreSQL de pgAdmin, configura DB_MODE=postgres en .env siguiendo las instrucciones anteriores.
+
+INICIO DE SESIÓN
+Usuario: x
+Contraseña: x
+Al entrar a http://localhost:3000 se muestra el acceso. La contraseña se almacena con scrypt en la tabla usuario. La sesión dura 8 horas y se cierra con el botón Cerrar sesión. Al reiniciar el servidor hay que iniciar sesión de nuevo. Las ventas se asignan al usuario que inició sesión. Credenciales simples para esta demostración local.
+
+DISEÑO DEL ACCESO
+La pantalla login.html conserva los estilos y el marcado visual de web2.html adjunto. Se conectó el formulario al servidor y se ajustó la longitud mínima para permitir x/x. Recordar usuario guarda solo el nombre, nunca la contraseña. La recuperación de contraseña continúa como aviso informativo; no hay envío de correos.

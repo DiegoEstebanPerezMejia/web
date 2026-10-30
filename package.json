@@ -1,0 +1,1 @@
+{"name":"pos-ropa-completo","version":"2.0.0","private":true,"scripts":{"start":"node servidor.js","test":"node prueba.js"},"dependencies":{"@electric-sql/pglite":"0.3.14","bootstrap":"5.3.3","bootstrap-icons":"1.11.3","dotenv":"16.4.5","express":"4.21.2","pg":"8.13.1"}}

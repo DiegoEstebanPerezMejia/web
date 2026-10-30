@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cuestionario de proveedores | POS Control</title>
+
+    <!-- Tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Iconos -->
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --azul-oscuro: #16324F;
+            --azul-principal: #2563EB;
+            --azul-hover: #1D4ED8;
+            --azul-claro: #EFF6FF;
+            --fondo: #F3F6FB;
+            --blanco: #FFFFFF;
+            --texto: #243247;
+            --texto-secundario: #64748B;
+            --borde: #E2E8F0;
+            --verde: #16A34A;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--fondo);
+            color: var(--texto);
+            font-size: 14px;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 285px minmax(0, 1fr);
+        }
+
+        /* Barra lateral */
+
+        .sidebar {
+            background: var(--azul-oscuro);
+            color: white;
+            padding: 30px 23px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 43px;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            background: var(--azul-principal);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .brand h1 {
+            font-size: 19px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .brand span {
+            display: block;
+            color: #B7C7DA;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .sidebar-label {
+            color: #91A7C1;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            margin: 25px 0 13px;
+        }
+
+        .step {
+            display: flex;
+            gap: 13px;
+            padding: 13px 11px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            align-items: flex-start;
+        }
+
+        .step.active {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .step.active .step-number {
+            background: var(--azul-principal);
+        }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 12px;
+            margin: 2px 0 4px;
+        }
+
+        .step-description {
+            color: #AFC0D4;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .sidebar-note {
+            margin-top: 38px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 12px;
+            color: #C5D2E1;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        .sidebar-note i {
+            color: #93C5FD;
+            font-size: 17px;
+            display: block;
+            margin-bottom: 9px;
+        }
+
+        /* Contenido */
+
+        .main-content {
+            min-width: 0;
+            padding: 35px clamp(18px, 4vw, 55px);
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 31px;
+        }
+
+        .breadcrumb-text {
+            color: var(--texto-secundario);
+            font-size: 12px;
+        }
+
+        .breadcrumb-text strong {
+            color: var(--texto);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 12px;
+            background: #DCFCE7;
+            color: #166534;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: #22C55E;
+            border-radius: 50%;
+        }
+
+        .page-heading {
+            margin-bottom: 27px;
+        }
+
+        .page-heading h2 {
+            font-size: clamp(23px, 3vw, 30px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin: 0 0 10px;
+        }
+
+        .page-heading p {
+            color: var(--texto-secundario);
+            margin: 0;
+            line-height: 1.7;
+            max-width: 760px;
+        }
+
+        .progress-card {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 14px;
+            padding: 17px 20px;
+            margin-bottom: 25px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .progress-label span:last-child {
+            color: var(--azul-principal);
+        }
+
+        .progress {
+            height: 6px;
+            background: #E8EEF7;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            background: var(--azul-principal);
+            transition: width 0.2s ease;
+        }
+
+        /* Tarjetas */
+
+        .form-section {
+            background: white;
+            border: 1px solid var(--borde);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            gap: 13px;
+            align-items: center;
+            padding: 23px 25px;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+            font-size: 19px;
+        }
+
+        .section-header h3 {
+            font-size: 15px;
+            font-weight: 800;
+            margin: 0 0 5px;
+        }
+
+        .section-header p {
+            font-size: 11px;
+            color: var(--texto-secundario);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .section-body {
+            padding: 25px;
+        }
+
+        .field-label {
+            display: block;
+            font-weight: 600;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: #DC2626;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 43px;
+            border-color: #DCE3ED;
+            border-radius: 9px;
+            font-size: 12px;
+            color: var(--texto);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--azul-principal);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .form-text {
+            color: var(--texto-secundario);
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .field-group {
+            margin-bottom: 21px;
+        }
+
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-divider {
+            border: 0;
+            border-top: 1px solid var(--borde);
+            margin: 25px 0;
+        }
+
+        /* Productos */
+
+        .product-card {
+            border: 1px solid #DCE5F0;
+            border-radius: 13px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .product-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 15px 19px;
+            background: #F8FAFC;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .product-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .product-number {
+            width: 29px;
+            height: 29px;
+            border-radius: 8px;
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-card-body {
+            padding: 23px;
+        }
+
+        .subsection-title {
+            color: var(--azul-oscuro);
+            font-size: 12px;
+            font-weight: 800;
+            margin: 0 0 19px;
+        }
+
+        .selection-box {
+            border: 1px solid #DCE3ED;
+            border-radius: 9px;
+            padding: 13px;
+            background: #FBFDFF;
+        }
+
+        .selection-box .form-check {
+            margin: 0;
+            min-height: 27px;
+        }
+
+        .selection-box .form-check-label {
+            font-size: 11px;
+        }
+
+        .selection-box .form-check-input:checked {
+            background-color: var(--azul-principal);
+            border-color: var(--azul-principal);
+        }
+
+        .add-product-button {
+            width: 100%;
+            padding: 13px;
+            border: 1px dashed #93B4F8;
+            border-radius: 10px;
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+            font-weight: 700;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .add-product-button:hover {
+            background: #DBEAFE;
+        }
+
+        .remove-product {
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            background: white;
+            font-size: 11px;
+            border-radius: 7px;
+            padding: 7px 10px;
+        }
+
+        .remove-product:hover {
+            background: #FEF2F2;
+        }
+
+        /* Botones finales */
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 21px 0 35px;
+        }
+
+        .footer-note {
+            color: var(--texto-secundario);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .btn-primary-custom {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 19px;
+            background: var(--azul-principal);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--azul-hover);
+            color: white;
+        }
+
+        .btn-secondary-custom {
+            border: 1px solid var(--borde);
+            border-radius: 9px;
+            padding: 12px 17px;
+            background: white;
+            color: var(--texto);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #F8FAFC;
+        }
+
+        .form-message {
+            display: none;
+            padding: 14px 17px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .form-message.success {
+            display: block;
+            background: #DCFCE7;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+
+        .form-message.error {
+            display: block;
+            background: #FEF2F2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        .footer-brand {
+            border-top: 1px solid var(--borde);
+            padding-top: 20px;
+            color: var(--texto-secundario);
+            font-size: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                padding: 19px 22px;
+            }
+
+            .brand {
+                margin-bottom: 18px;
+            }
+
+            .sidebar-label,
+            .sidebar .step,
+            .sidebar-note {
+                display: none;
+            }
+
+            .main-content {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .main-content {
+                padding: 20px 13px;
+            }
+
+            .section-header,
+            .section-body {
+                padding: 18px;
+            }
+
+            .product-card-body {
+                padding: 17px;
+            }
+
+            .form-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .footer-actions {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 10px;
+            }
+
+            .footer-actions button {
+                width: 100%;
+            }
+
+            .topbar {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body><div style="background:#16324f;padding:14px 25px;display:flex;gap:20px"><a style="color:white" href="proveedores.html">Proveedores</a><a style="color:white" href="ventas.html">Ventas</a><a style="color:white" href="catalogo.html">Catálogo e inventario</a></div>
+
+<div class="layout">
+
+    <!-- BARRA LATERAL -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-shop"></i>
+            </div>
+            <div>
+                <h1>POS Control</h1>
+                <span>Gestión de inventario y proveedores</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">Registro de proveedores</div>
+
+        <div class="step active">
+            <div class="step-number">01</div>
+            <div>
+                <div class="step-title">Datos del proveedor</div>
+                <div class="step-description">Información de contacto y empresa.</div>
+            </div>
+        </div>
+
+        <div class="step active">
+            <div class="step-number">02</div>
+            <div>
+                <div class="step-title">Catálogo de productos</div>
+                <div class="step-description">Prendas, tallas, colores y materiales.</div>
+            </div>
+        </div>
+
+        <div class="step active">
+            <div class="step-number">03</div>
+            <div>
+                <div class="step-title">Condiciones comerciales</div>
+                <div class="step-description">Precios, existencias y entregas.</div>
+            </div>
+        </div>
+
+        <div class="sidebar-note">
+            <i class="bi bi-info-circle"></i>
+            <strong>Antes de comenzar</strong>
+            <br>
+            Registra los datos de tu empresa y agrega los productos textiles que deseas ofrecer a la tienda.
+        </div>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+        <div class="topbar">
+            <div class="breadcrumb-text">
+                Proveedores / <strong>Nuevo registro</strong>
+            </div>
+
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Formulario abierto
+            </div>
+        </div>
+
+        <header class="page-heading">
+            <h2>Cuestionario de proveedores</h2>
+            <p>
+                Registra la información de tu empresa y los productos de ropa que ofreces.
+                Los datos permitirán evaluar tu catálogo para su posible incorporación al punto de venta.
+            </p>
+        </header>
+
+        <!-- PROGRESO -->
+        <div class="progress-card">
+            <div class="progress-label">
+                <span>Progreso del formulario</span>
+                <span id="progress-text">0% completado</span>
+            </div>
+
+            <div class="progress">
+                <div
+                    class="progress-bar"
+                    id="progress-bar"
+                    role="progressbar"
+                    style="width: 0%"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+
+        <div id="form-message" class="form-message" role="status" aria-live="polite"></div>
+
+        <form id="supplier-form">
+
+            <!-- SECCIÓN 1: DATOS DEL PROVEEDOR -->
+            <section class="form-section">
+
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div>
+                        <h3>01. Datos generales del proveedor</h3>
+                        <p>Información básica para identificar y contactar a tu empresa.</p>
+                    </div>
+                </div>
+
+                <div class="section-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="nombre-comercial">
+                                Nombre comercial <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="nombre-comercial"
+                                name="nombre_comercial"
+                                placeholder="Ej. Moda Urbana"
+                                required>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="razon-social">
+                                Razón social
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="razon-social"
+                                name="razon_social"
+                                placeholder="Nombre fiscal de la empresa">
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="rfc">
+                                RFC
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="rfc"
+                                name="rfc"
+                                maxlength="13"
+                                placeholder="RFC de la empresa o persona física">
+                            <div class="form-text">Se permiten RFC de persona física o moral.</div>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="tipo-proveedor">
+                                Tipo de proveedor <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="tipo-proveedor" name="tipo_proveedor" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Fabricante</option>
+                                <option>Distribuidor autorizado</option>
+                                <option>Mayorista</option>
+                                <option>Minorista</option>
+                                <option>Importador</option>
+                                <option>Confeccionista</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="contacto">
+                                Nombre del contacto <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="contacto"
+                                name="contacto"
+                                placeholder="Nombre de la persona responsable"
+                                required>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="puesto">
+                                Puesto del contacto
+                            </label>
+                            <select class="form-select" id="puesto" name="puesto">
+                                <option value="">Selecciona una opción</option>
+                                <option>Propietario</option>
+                                <option>Gerente comercial</option>
+                                <option>Ejecutivo de ventas</option>
+                                <option>Representante de ventas</option>
+                                <option>Encargado de distribución</option>
+                                <option>Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="correo">
+                                Correo electrónico <span class="required">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="correo"
+                                name="correo"
+                                placeholder="contacto@empresa.com"
+                                required>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="telefono">
+                                Teléfono <span class="required">*</span>
+                            </label>
+                            <input
+                                type="tel"
+                                class="form-control"
+                                id="telefono"
+                                name="telefono"
+                                placeholder="Ej. 5512345678"
+                                required>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="sitio-web">
+                                Sitio web o tienda en línea
+                            </label>
+                            <input
+                                type="url"
+                                class="form-control"
+                                id="sitio-web"
+                                name="sitio_web"
+                                placeholder="https://www.empresa.com">
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="estado">
+                                Estado de operación principal <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="">Selecciona un estado</option>
+                                <option>Aguascalientes</option>
+                                <option>Baja California</option>
+                                <option>Baja California Sur</option>
+                                <option>Campeche</option>
+                                <option>Chiapas</option>
+                                <option>Chihuahua</option>
+                                <option>Ciudad de México</option>
+                                <option>Coahuila</option>
+                                <option>Colima</option>
+                                <option>Durango</option>
+                                <option>Estado de México</option>
+                                <option>Guanajuato</option>
+                                <option>Guerrero</option>
+                                <option>Hidalgo</option>
+                                <option>Jalisco</option>
+                                <option>Michoacán</option>
+                                <option>Morelos</option>
+                                <option>Nayarit</option>
+                                <option>Nuevo León</option>
+                                <option>Oaxaca</option>
+                                <option>Puebla</option>
+                                <option>Querétaro</option>
+                                <option>Quintana Roo</option>
+                                <option>San Luis Potosí</option>
+                                <option>Sinaloa</option>
+                                <option>Sonora</option>
+                                <option>Tabasco</option>
+                                <option>Tamaulipas</option>
+                                <option>Tlaxcala</option>
+                                <option>Veracruz</option>
+                                <option>Yucatán</option>
+                                <option>Zacatecas</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: CATÁLOGO -->
+            <section class="form-section">
+
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="bi bi-tags"></i>
+                    </div>
+                    <div>
+                        <h3>02. Catálogo de productos</h3>
+                        <p>Agrega las prendas que ofrece tu empresa y especifica sus características.</p>
+                    </div>
+                </div>
+
+                <div class="section-body">
+
+                    <div class="alert alert-primary border-0" style="font-size: 11px; line-height: 1.7;">
+                        <i class="bi bi-lightbulb me-1"></i>
+                        Puedes registrar varios productos. Cada producto tendrá su propia categoría,
+                        tallas, colores, materiales y precios.
+                    </div>
+
+                    <div id="products-container"></div>
+
+                    <button type="button" class="add-product-button" id="add-product">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Agregar otro producto
+                    </button>
+
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: CONDICIONES COMERCIALES -->
+            <section class="form-section">
+
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <div>
+                        <h3>03. Condiciones comerciales y distribución</h3>
+                        <p>Indica las condiciones generales bajo las cuales puedes suministrar mercancía.</p>
+                    </div>
+                </div>
+
+                <div class="section-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="modalidad-venta">
+                                Modalidad de venta <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="modalidad-venta" name="modalidad_venta" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Menudeo</option>
+                                <option>Medio mayoreo</option>
+                                <option>Mayoreo</option>
+                                <option>Menudeo y mayoreo</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="disponibilidad">
+                                Disponibilidad habitual <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="disponibilidad" name="disponibilidad" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>En existencia</option>
+                                <option>Bajo pedido</option>
+                                <option>Producción sobre pedido</option>
+                                <option>Existencia y producción sobre pedido</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="pedido-minimo-general">
+                                Pedido mínimo general (piezas)
+                            </label>
+                            <input
+                                type="number"
+                                min="1"
+                                step="1"
+                                class="form-control"
+                                id="pedido-minimo-general"
+                                name="pedido_minimo_general"
+                                placeholder="Ej. 12">
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="tiempo-entrega">
+                                Tiempo habitual de entrega <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="tiempo-entrega" name="tiempo_entrega" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>1 a 3 días hábiles</option>
+                                <option>4 a 7 días hábiles</option>
+                                <option>8 a 15 días hábiles</option>
+                                <option>16 a 30 días hábiles</option>
+                                <option>Más de 30 días hábiles</option>
+                                <option>Por confirmar según pedido</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="entrega">
+                                Modalidad de entrega <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="entrega" name="entrega" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Recolección en almacén</option>
+                                <option>Entrega local</option>
+                                <option>Envío nacional</option>
+                                <option>Paquetería</option>
+                                <option>Entrega local y envío nacional</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="pago">
+                                Condiciones de pago <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="pago" name="condiciones_pago" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Pago de contado</option>
+                                <option>Transferencia anticipada</option>
+                                <option>Pago contra entrega</option>
+                                <option>Crédito a 7 días</option>
+                                <option>Crédito a 15 días</option>
+                                <option>Crédito a 30 días</option>
+                                <option>Condiciones por negociar</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="facturacion">
+                                ¿Emite factura? <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="facturacion" name="facturacion" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Sí</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="cobertura">
+                                Cobertura de distribución <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="cobertura" name="cobertura" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Local</option>
+                                <option>Estatal</option>
+                                <option>Regional</option>
+                                <option>Nacional</option>
+                                <option>Internacional</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 field-group">
+                            <label class="field-label" for="reposicion">
+                                Capacidad de reposición de mercancía <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="reposicion" name="reposicion" required>
+                                <option value="">Selecciona una opción</option>
+                                <option>Reposición inmediata</option>
+                                <option>Reposición en 1 a 7 días</option>
+                                <option>Reposición en 8 a 15 días</option>
+                                <option>Reposición en más de 15 días</option>
+                                <option>Sujeta a disponibilidad</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 field-group">
+                            <label class="field-label" for="observaciones">
+                                Observaciones adicionales
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="observaciones"
+                                name="observaciones"
+                                placeholder="Información adicional sobre el catálogo, promociones, personalización de prendas o condiciones especiales."></textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOTONES -->
+            <div class="form-footer">
+
+                <div class="footer-note">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Los campos marcados con <span class="required">*</span> son obligatorios.
+                    <br>
+                    Verifica que la información sea correcta antes de enviar.
+                </div>
+
+                <div class="footer-actions d-flex gap-2">
+                    <button type="reset" class="btn-secondary-custom">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                        Limpiar formulario
+                    </button>
+
+                    <button type="submit" class="btn-primary-custom">
+                        Enviar cuestionario
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </form>
+
+        <footer class="footer-brand">
+            POS Control · Sistema de gestión de punto de venta y proveedores
+        </footer>
+
+    </main>
+</div>
+
+<!-- PLANTILLA DE PRODUCTO -->
+<template id="product-template">
+
+    <div class="product-card">
+
+        <div class="product-card-header">
+            <div class="product-title">
+                <span class="product-number">01</span>
+                <span class="product-heading">Producto 1</span>
+            </div>
+
+            <button type="button" class="remove-product">
+                <i class="bi bi-trash me-1"></i>
+                Eliminar
+            </button>
+        </div>
+
+        <div class="product-card-body">
+
+            <div class="row">
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Nombre o modelo del producto <span class="required">*</span></label>
+                    <input
+                        type="text"
+                        class="form-control product-required"
+                        data-field="nombre"
+                        placeholder="Ej. Playera básica algodón"
+                        required>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Categoría de la prenda <span class="required">*</span></label>
+                    <select class="form-select product-required" data-field="categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option>Playeras</option>
+                        <option>Camisas</option>
+                        <option>Blusas</option>
+                        <option>Pantalones</option>
+                        <option>Jeans</option>
+                        <option>Shorts</option>
+                        <option>Faldas</option>
+                        <option>Vestidos</option>
+                        <option>Chamarras</option>
+                        <option>Sudaderas</option>
+                        <option>Suéteres</option>
+                        <option>Ropa deportiva</option>
+                        <option>Ropa interior</option>
+                        <option>Accesorios</option>
+                        <option>Calzado</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Género o público objetivo <span class="required">*</span></label>
+                    <select class="form-select product-required" data-field="genero" required>
+                        <option value="">Selecciona una opción</option>
+                        <option>Hombre</option>
+                        <option>Mujer</option>
+                        <option>Unisex</option>
+                        <option>Infantil</option>
+                        <option>Bebé</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Sistema de tallas <span class="required">*</span></label>
+                    <select class="form-select product-required size-system" data-field="sistema_tallas" required>
+                        <option value="">Selecciona una opción</option>
+                        <option value="alfabetico">Alfabético (XS–XXXL)</option>
+                        <option value="numerico">Numérico (22–44)</option>
+                        <option value="infantil">Infantil (2–16)</option>
+                        <option value="unitalla">Unitalla</option>
+                        <option value="no_aplica">No aplica</option>
+                    </select>
+                </div>
+
+                <div class="col-12 field-group size-field">
+                    <label class="field-label">Tallas disponibles <span class="required">*</span></label>
+
+                    <div class="selection-box size-options d-flex flex-wrap gap-3">
+                        <span class="form-text">Selecciona primero el sistema de tallas.</span>
+                    </div>
+                </div>
+
+                <div class="col-12 field-group">
+                    <label class="field-label">Colores disponibles <span class="required">*</span></label>
+
+                    <div class="selection-box d-flex flex-wrap gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input product-required color-option" type="checkbox" value="Negro" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Negro</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Blanco" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Blanco</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Gris" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Gris</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Azul" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Azul</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Azul marino" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Azul marino</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Rojo" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Rojo</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Verde" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Verde</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Amarillo" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Amarillo</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Rosa" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Rosa</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Morado" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Morado</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Café" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Café</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Beige" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Beige</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Naranja" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Naranja</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input color-option" type="checkbox" value="Multicolor" data-field="colores" id="COLOR_ID">
+                            <label class="form-check-label" for="COLOR_ID">Multicolor</label>
+                        </div>
+                    </div>
+
+                    <div class="form-text mt-2">Selecciona al menos un color.</div>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Material principal <span class="required">*</span></label>
+                    <select class="form-select product-required" data-field="material" required>
+                        <option value="">Selecciona un material</option>
+                        <option>Algodón</option>
+                        <option>Poliéster</option>
+                        <option>Mezclilla</option>
+                        <option>Lino</option>
+                        <option>Lana</option>
+                        <option>Nylon</option>
+                        <option>Elastano</option>
+                        <option>Viscosa</option>
+                        <option>Piel</option>
+                        <option>Material sintético</option>
+                        <option>Mezcla de materiales</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Tipo de ajuste</label>
+                    <select class="form-select" data-field="ajuste">
+                        <option value="">Selecciona una opción</option>
+                        <option>Entallado / Slim fit</option>
+                        <option>Regular fit</option>
+                        <option>Holgado / Oversize</option>
+                        <option>Recto</option>
+                        <option>Depende del modelo</option>
+                        <option>No aplica</option>
+                    </select>
+                </div>
+
+                <div class="col-12 field-group">
+                    <label class="field-label">Descripción del producto</label>
+                    <textarea
+                        class="form-control"
+                        data-field="descripcion"
+                        placeholder="Describe el diseño, corte, estampado u otras características de la prenda."></textarea>
+                </div>
+
+            </div>
+
+            <hr class="section-divider">
+
+            <h4 class="subsection-title">
+                <i class="bi bi-currency-dollar me-2"></i>
+                Precios e inventario
+            </h4>
+
+            <div class="row">
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Precio unitario (MXN) <span class="required">*</span></label>
+                    <input
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        class="form-control product-required"
+                        data-field="precio_unitario"
+                        placeholder="Ej. 149.90"
+                        required>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Precio de mayoreo por pieza (MXN)</label>
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        class="form-control"
+                        data-field="precio_mayoreo"
+                        placeholder="Ej. 110.00">
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Pedido mínimo del producto (piezas) <span class="required">*</span></label>
+                    <input
+                        type="number"
+                        min="1"
+                        step="1"
+                        class="form-control product-required"
+                        data-field="pedido_minimo"
+                        placeholder="Ej. 12"
+                        required>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Existencias disponibles (piezas) <span class="required">*</span></label>
+                    <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        class="form-control product-required"
+                        data-field="existencias"
+                        placeholder="Ej. 150"
+                        required>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Disponibilidad del producto <span class="required">*</span></label>
+                    <select class="form-select product-required" data-field="disponibilidad" required>
+                        <option value="">Selecciona una opción</option>
+                        <option>En existencia</option>
+                        <option>Bajo pedido</option>
+                        <option>Producción sobre pedido</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 field-group">
+                    <label class="field-label">Tiempo de entrega del producto <span class="required">*</span></label>
+                    <select class="form-select product-required" data-field="entrega" required>
+                        <option value="">Selecciona una opción</option>
+                        <option>1 a 3 días hábiles</option>
+                        <option>4 a 7 días hábiles</option>
+                        <option>8 a 15 días hábiles</option>
+                        <option>16 a 30 días hábiles</option>
+                        <option>Más de 30 días hábiles</option>
+                        <option>Por confirmar según pedido</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</template>
+
+<script>
+    const form = document.getElementById('supplier-form');
+    const productsContainer = document.getElementById('products-container');
+    const productTemplate = document.getElementById('product-template');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const message = document.getElementById('form-message');
+
+    let productCount = 0;
+
+    const sizeOptions = {
+        alfabetico: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+        numerico: ['22', '24', '26', '28', '30', '32', '34', '36', '38', '40', '42', '44'],
+        infantil: ['2', '4', '6', '8', '10', '12', '14', '16'],
+        unitalla: ['Unitalla'],
+        no_aplica: ['No aplica']
+    };
+
+    // Agrega un producto al formulario.
+    function addProduct() {
+        productCount++;
+
+        const fragment = productTemplate.content.cloneNode(true);
+        const card = fragment.querySelector('.product-card');
+        const number = String(productCount).padStart(2, '0');
+
+        card.dataset.productId = productCount;
+
+        card.querySelector('.product-number').textContent = number;
+        card.querySelector('.product-heading').textContent = `Producto ${productCount}`;
+
+        // Genera identificadores únicos para los controles de color.
+        card.querySelectorAll('.color-option').forEach((checkbox, index) => {
+            const id = `color-${productCount}-${index}`;
+            checkbox.id = id;
+            checkbox.nextElementSibling.htmlFor = id;
+        });
+
+        // Elimina el producto correspondiente.
+        card.querySelector('.remove-product').addEventListener('click', () => {
+            const cards = productsContainer.querySelectorAll('.product-card');
+
+            if (cards.length <= 1) {
+                showMessage('Debes registrar al menos un producto.', 'error');
+                return;
+            }
+
+            card.remove();
+            renumberProducts();
+            updateProgress();
+        });
+
+        // Genera las tallas según el sistema seleccionado.
+        const sizeSystem = card.querySelector('.size-system');
+        const sizeContainer = card.querySelector('.size-options');
+        const sizeField = card.querySelector('.size-field');
+
+        sizeSystem.addEventListener('change', () => {
+            const selectedSystem = sizeSystem.value;
+            sizeContainer.innerHTML = '';
+
+            if (!selectedSystem) {
+                sizeContainer.innerHTML =
+                    '<span class="form-text">Selecciona primero el sistema de tallas.</span>';
+                updateProgress();
+                return;
+            }
+
+            sizeOptions[selectedSystem].forEach((size, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'form-check';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'form-check-input size-option';
+                checkbox.value = size;
+                checkbox.dataset.field = 'tallas';
+                checkbox.id = `size-${productCount}-${index}`;
+
+                const label = document.createElement('label');
+                label.className = 'form-check-label';
+                label.htmlFor = checkbox.id;
+                label.textContent = size;
+
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(label);
+                sizeContainer.appendChild(wrapper);
+            });
+
+            // Unitalla y No aplica tienen una sola opción.
+            if (selectedSystem === 'unitalla' || selectedSystem === 'no_aplica') {
+                const onlyCheckbox = sizeContainer.querySelector('input');
+                onlyCheckbox.checked = true;
+            }
+
+            updateProgress();
+        });
+
+        card.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', updateProgress);
+            field.addEventListener('change', updateProgress);
+        });
+
+        productsContainer.appendChild(fragment);
+        renumberProducts();
+        updateProgress();
+    }
+
+    // Actualiza los títulos después de agregar o eliminar productos.
+    function renumberProducts() {
+        productsContainer.querySelectorAll('.product-card').forEach((card, index) => {
+            const number = String(index + 1).padStart(2, '0');
+            card.querySelector('.product-number').textContent = number;
+            card.querySelector('.product-heading').textContent = `Producto ${index + 1}`;
+        });
+    }
+
+    // Comprueba los grupos de casillas obligatorias.
+    function checkProductCheckboxes(card) {
+        const selectedColors = card.querySelectorAll('.color-option:checked').length;
+        const selectedSizes = card.querySelectorAll('.size-option:checked').length;
+        const selectedSystem = card.querySelector('.size-system').value;
+
+        return selectedColors > 0 &&
+               selectedSizes > 0 &&
+               selectedSystem !== '';
+    }
+
+    // Calcula el progreso usando campos obligatorios y selecciones requeridas.
+    function updateProgress() {
+        const requiredFields = Array.from(
+            form.querySelectorAll('[required]')
+        ).filter(field => !field.disabled);
+
+        let total = requiredFields.length;
+        let completed = requiredFields.filter(field => {
+            if (field.type === 'checkbox') {
+                return field.checked;
+            }
+
+            return field.value.trim() !== '';
+        }).length;
+
+        const cards = productsContainer.querySelectorAll('.product-card');
+
+        cards.forEach(card => {
+            total += 2;
+
+            if (card.querySelectorAll('.color-option:checked').length > 0) {
+                completed++;
+            }
+
+            if (card.querySelectorAll('.size-option:checked').length > 0) {
+                completed++;
+            }
+        });
+
+        const percentage = total ? Math.round((completed / total) * 100) : 0;
+
+        progressBar.style.width = `${percentage}%`;
+        progressBar.setAttribute('aria-valuenow', percentage);
+        progressText.textContent = `${percentage}% completado`;
+    }
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `form-message ${type}`;
+
+        message.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+
+    // Validaciones específicas de productos.
+    function validateProducts() {
+        const cards = productsContainer.querySelectorAll('.product-card');
+
+        for (let index = 0; index < cards.length; index++) {
+            const card = cards[index];
+
+            if (!checkProductCheckboxes(card)) {
+                showMessage(
+                    `Completa las tallas y selecciona al menos un color para el producto ${index + 1}.`,
+                    'error'
+                );
+
+                card.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+                return false;
+            }
+
+            const unitPrice = Number(
+                card.querySelector('[data-field="precio_unitario"]').value
+            );
+
+            const wholesaleField = card.querySelector('[data-field="precio_mayoreo"]');
+            const wholesalePrice = wholesaleField.value === ''
+                ? null
+                : Number(wholesaleField.value);
+
+            if (wholesalePrice !== null && wholesalePrice > 0 && wholesalePrice > unitPrice) {
+                showMessage(
+                    `El precio de mayoreo del producto ${index + 1} no debe ser mayor que el precio unitario.`,
+                    'error'
+                );
+
+                wholesaleField.focus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Normaliza el RFC.
+    document.getElementById('rfc').addEventListener('input', function () {
+        this.value = this.value.toUpperCase().replace(/\s/g, '');
+    });
+
+    // Agrega el primer producto al cargar.
+    document.getElementById('add-product').addEventListener('click', addProduct);
+
+    addProduct();
+
+    // Reinicia el formulario.
+    form.addEventListener('reset', event => {
+        if (event.defaultPrevented) return;
+        setTimeout(() => {
+            if (event.defaultPrevented) return;
+            productsContainer.innerHTML = '';
+            productCount = 0;
+            addProduct();
+
+            message.className = 'form-message';
+            message.textContent = '';
+
+            updateProgress();
+        }, 0);
+    });
+
+    // Envía los datos al servidor, que los guarda en PostgreSQL.
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!form.reportValidity() || !validateProducts()) return;
+        const boton = form.querySelector('[type="submit"]');
+        const original = boton.textContent;
+        const datos = Object.fromEntries(new FormData(form).entries());
+        datos.productos = Array.from(productsContainer.querySelectorAll('.product-card'), card => {
+            const producto = {};
+            card.querySelectorAll('[data-field]').forEach(campo => {
+                const clave = campo.dataset.field;
+                if (campo.type === 'checkbox') {
+                    if (!producto[clave]) producto[clave] = [];
+                    if (campo.checked) producto[clave].push(campo.value);
+                } else producto[clave] = campo.value;
+            });
+            return producto;
+        });
+        boton.disabled = true;
+        boton.textContent = 'Guardando...';
+        try {
+            const respuesta = await fetch('/api/cuestionarios', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+            const resultado = await respuesta.json();
+            if (!respuesta.ok) throw new Error(resultado.error || 'No se pudo guardar.');
+            showMessage(`¡Cuestionario guardado! Folio: ${resultado.id_cuestionario}.`, 'success');
+            cargarProveedores();
+        } catch (error) {
+            showMessage(`No se pudo guardar: ${error.message}`, 'error');
+        } finally {
+            boton.disabled = false;
+            boton.textContent = original;
+        }
+    });
+
+    // Confirma antes de limpiar la información capturada.
+    form.addEventListener('reset', event => {
+        if (!confirm('¿Deseas limpiar todos los datos del cuestionario?')) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<section style="padding:25px;max-width:1100px;margin:auto"><h2 style="font-size:20px">Proveedores registrados</h2><div id="proveedores-guardados"></div><button type="button" onclick="cargarProveedores()">Actualizar lista</button></section><script>
+async function cargarProveedores(){const cont=document.getElementById('proveedores-guardados');try{const r=await fetch('/api/proveedores');if(!r.ok)throw Error();const datos=await r.json();cont.replaceChildren();datos.forEach(p=>{const fila=document.createElement('p');fila.textContent=p.nombre+' · '+(p.correo||'Sin correo')+' · '+(p.id_cuestionario?'Cuestionario #'+p.id_cuestionario:'Datos de demostración');cont.appendChild(fila);});}catch(e){cont.textContent='No se pudo cargar la lista.';}}cargarProveedores();</script><div style="padding:15px 25px;text-align:right"><button type="button" class="btn btn-outline-danger" id="salir">Cerrar sesión</button></div><script>document.getElementById('salir').onclick=async()=>{try{const r=await fetch('/api/logout',{method:'POST'});if(r.ok)location.href='/login.html';else alert('No se pudo cerrar sesión.');}catch(e){alert('No se pudo cerrar sesión.');}};</script></body>
+</html>
