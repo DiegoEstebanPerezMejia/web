@@ -1,9 +1,3 @@
--- POS CONTROL ROPA | PostgreSQL 14+
--- EJECUTAR EN LA BASE pos_ropa (crearla ANTES en pgAdmin o con createdb).
--- INSTALACIÓN NUEVA; no ejecutar sobre una base MySQL previa.
--- Sin almacenes, sin SKU. CATALOGO contiene la FK id_producto.
--- Diseñado para una tienda física, prendas con talla/color y conteo de existencias.
--- NOTA: IF NOT EXISTS evita fallos al repetir CREATE, pero no migra esquemas anteriores.
 
 BEGIN;
 
